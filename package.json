@@ -1,0 +1,31 @@
+{
+  "name": "testmaster-ai",
+  "version": "1.0.0",
+  "description": "Complete AI-powered testing assistant Chrome extension",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"No tests specified\"",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "selenium",
+    "playwright",
+    "cypress",
+    "qa",
+    "test-automation",
+    "chrome-extension",
+    "ai"
+  ],
+  "author": "TestMaster AI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/testmaster-ai-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/testmaster-ai-extension/issues"
+  },
+  "homepage": "https://github.com/yourusername/testmaster-ai-extension#readme"
+}

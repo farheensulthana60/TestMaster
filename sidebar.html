@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TestMaster AI Sidebar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header h2 {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .close-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+    
+    .close-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: rotate(90deg);
+    }
+    
+    .tabs {
+      display: flex;
+      background: white;
+      border-bottom: 2px solid #e1e8ed;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    
+    .tab {
+      padding: 12px 15px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      color: #666;
+    }
+    
+    .tab:hover {
+      background: #f5f7fa;
+      color: #333;
+    }
+    
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+      font-weight: 600;
+    }
+    
+    .content {
+      height: calc(100vh - 110px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-secondary {
+      background: #f5f7fa;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    
+    .btn-secondary:hover {
+      background: #e1e8ed;
+    }
+    
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #059669;
+    }
+    
+    .code-output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 10px;
+      position: relative;
+    }
+    
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .info-item {
+      background: #f5f7fa;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    
+    .info-item strong {
+      display: block;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 2px;
+    }
+    
+    .badge-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .badge-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .action-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .action-item {
+      background: #f5f7fa;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      border-left: 3px solid #667eea;
+      font-size: 12px;
+    }
+    
+    .action-item strong {
+      color: #667eea;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .ai-chat {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 250px);
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .chat-message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .chat-message.user {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      margin-left: 20%;
+    }
+    
+    .chat-message.ai {
+      background: #f5f7fa;
+      color: #333;
+      margin-right: 20%;
+    }
+    
+    .chat-input-container {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .chat-input {
+      flex: 1;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+    }
+    
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .selector-options {
+      margin-top: 15px;
+    }
+    
+    .selector-option {
+      background: #f5f7fa;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .selector-option:hover {
+      border-color: #667eea;
+      background: white;
+    }
+    
+    .metric-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .metric-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    
+    .metric-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .feature-btn {
+      padding: 15px;
+      background: white;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+      font-size: 12px;
+    }
+    
+    .feature-btn:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>🤖 TestMaster AI</h2>
+    <button class="close-btn" id="closeBtn">×</button>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab active" data-tab="elementLocator">🎯 Element Locator</button>
+    <button class="tab" data-tab="scriptGenerator">📝 Script Generator</button>
+    <button class="tab" data-tab="recorder">🔴 Recorder</button>
+    <button class="tab" data-tab="apiTester">🌐 API Testing</button>
+    <button class="tab" data-tab="bugReporter">🐛 Bug Reporter</button>
+    <button class="tab" data-tab="testData">💾 Test Data</button>
+    <button class="tab" data-tab="performance">⚡ Performance</button>
+    <button class="tab" data-tab="accessibility">♿ Accessibility</button>
+    <button class="tab" data-tab="visualRegression">👁️ Visual Testing</button>
+    <button class="tab" data-tab="testPlan">📊 Test Plans</button>
+    <button class="tab" data-tab="aiAssistant">🤖 AI Assistant</button>
+  </div>
+  
+  <div class="content">
+    <!-- Element Locator Tab -->
+    <div id="elementLocator" class="tab-content active">
+      <div class="card">
+        <h3>🎯 Element Locator & Inspector</h3>
+        <button class="btn btn-primary" id="inspectBtn">
+          <span>🔍</span> Inspect Element on Page
+        </button>
+        
+        <div id="elementInfo" style="display: none; margin-top: 20px;">
+          <h4 style="margin-bottom: 15px;">Selected Element Details:</h4>
+          <div id="elementDetails"></div>
+          
+          <div class="selector-options">
+            <h4 style="margin-bottom: 10px;">Available Selectors:</h4>
+            <div id="selectorsList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Script Generator Tab -->
+    <div id="scriptGenerator" class="tab-content">
+      <div class="card">
+        <h3>📝 Test Script Generator</h3>
+        
+        <div class="form-group">
+          <label>Framework</label>
+          <select id="frameworkSelect">
+            <option value="selenium-python">Selenium (Python)</option>
+            <option value="selenium-java">Selenium (Java)</option>
+            <option value="playwright-js">Playwright (JavaScript)</option>
+            <option value="playwright-python">Playwright (Python)</option>
+            <option value="cypress">Cypress</option>
+            <option value="puppeteer">Puppeteer</option>
+            <option value="webdriverio">WebDriverIO</option>
+            <option value="testcafe">TestCafe</option>
+            <option value="robot-framework">Robot Framework</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Test Type</label>
+          <select id="testTypeSelect">
+            <option value="functional">Functional Test</option>
+            <option value="e2e">End-to-End Test</option>
+            <option value="integration">Integration Test</option>
+            <option value="smoke">Smoke Test</option>
+            <option value="regression">Regression Test</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Test Description</label>
+          <textarea id="testDescription" placeholder="Describe what this test should do..."></textarea>
+        </div>
+        
+        <button class="btn btn-primary" id="generateScriptBtn">
+          <span>✨</span> Generate Test Script with AI
+        </button>
+        
+        <div id="generatedScript"></div>
+      </div>
+      
+      <div class="card">
+        <h3>🔄 Convert Recorded Actions to Script</h3>
+        <button class="btn btn-secondary" id="convertRecordingBtn">
+          <span>🔄</span> Convert Last Recording
+        </button>
+        <div id="convertedScript"></div>
+      </div>
+    </div>
+    
+    <!-- Recorder Tab -->
+    <div id="recorder" class="tab-content">
+      <div class="card">
+        <h3>🔴 Action Recorder</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <button class="btn btn-primary" id="startRecordBtn">
+            <span>🔴</span> Start Recording
+          </button>
+          <button class="btn btn-secondary" id="stopRecordBtn" disabled>
+            <span>⏹️</span> Stop Recording
+          </button>
+          <button class="btn btn-secondary" id="clearRecordBtn">
+            <span>🗑️</span> Clear
+          </button>
+        </div>
+        
+        <div id="recordingStatus" style="display: none;">
+          <div class="badge badge-error">● Recording in progress...</div>
+        </div>
+        
+        <div id="recordedActions">
+          <h4>Recorded Actions:</h4>
+          <ul class="action-list" id="actionList">
+            <li style="text-align: center; color: #999; padding: 20px;">
+              No actions recorded yet. Click "Start Recording" to begin.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- API Tester Tab -->
+    <div id="apiTester" class="tab-content">
+      <div class="card">
+        <h3>🌐 API Testing & Validation</h3>
+        
+        <div class="form-group">
+          <label>Method</label>
+          <select id="apiMethod">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+            <option value="PATCH">PATCH</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>URL</label>
+          <input type="text" id="apiUrl" placeholder="https://api.example.com/endpoint">
+        </div>
+        
+        <div class="form-group">
+          <label>Headers (JSON)</label>
+          <textarea id="apiHeaders" placeholder='{"Content-Type": "application/json"}'></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Body (JSON)</label>
+          <textarea id="apiBody" placeholder='{"key": "value"}'></textarea>
+        </div>
+        
+        <button class="btn btn-primary" id="sendApiBtn">
+          <span>🚀</span> Send Request
+        </button>
+        
+        <div id="apiResponse"></div>
+        
+        <button class="btn btn-secondary" id="generateApiTestBtn" style="margin-top: 10px;">
+          <span>📝</span> Generate API Test Script
+        </button>
+      </div>
+    </div>
+    
+    <!-- Bug Reporter Tab -->
+    <div id="bugReporter" class="tab-content">
+      <div class="card">
+        <h3>🐛 Bug Reporter & Documentation</h3>
+        
+        <div class="form-group">
+          <label>Bug Title</label>
+          <input type="text" id="bugTitle" placeholder="Brief description of the bug">
+        </div>
+        
+        <div class="form-group">
+          <label>Severity</label>
+          <select id="bugSeverity">
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="bugPriority">
+            <option value="p1">P1 - Immediate</option>
+            <option value="p2">P2 - High</option>
+            <option value="p3">P3 - Medium</option>
+            <option value="p4">P4 - Low</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Steps to Reproduce</label>
+          <textarea id="bugSteps" placeholder="1. Navigate to...&#10;2. Click on...&#10;3. Observe..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Expected Result</label>
+          <textarea id="bugExpected" placeholder="What should happen..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Actual Result</label>
+          <textarea id="bugActual" placeholder="What actually happened..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Environment</label>
+          <input type="text" id="bugEnvironment" placeholder="Browser, OS, Version...">
+        </div>
+        
+        <button class="btn btn-primary" id="captureScreenshotBtn">
+          <span>📸</span> Capture Screenshot
+        </button>
+        
+        <div id="screenshotPreview"></div>
+        
+        <button class="btn btn-success" id="generateBugReportBtn" style="margin-top: 15px;">
+          <span>📄</span> Generate Bug Report
+        </button>
+        
+        <div id="bugReportOutput"></div>
+      </div>
+    </div>
+    
+    <!-- Test Data Generator Tab -->
+    <div id="testData" class="tab-content">
+      <div class="card">
+        <h3>💾 Test Data Generator</h3>
+        
+        <div class="form-group">
+          <label>Data Type</label>
+          <select id="dataType">
+            <option value="user">User Data (Name, Email, Phone)</option>
+            <option value="address">Address Data</option>
+            <option value="credit-card">Credit Card Data</option>
+            <option value="company">Company Data</option>
+            <option value="date">Date/Time Data</option>
+            <option value="custom">Custom Data</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Number of Records</label>
+          <input type="number" id="dataCount" value="10" min="1" max="1000">
+        </div>
+        
+        <div class="form-group">
+          <label>Output Format</label>
+          <select id="dataFormat">
+            <option value="json">JSON</option>
+            <option value="csv">CSV</option>
+            <option value="sql">SQL INSERT</option>
+            <option value="python">Python Dict</option>
+            <option value="java">Java Object</option>
+          </select>
+        </div>
+        
+        <button class="btn btn-primary" id="generateDataBtn">
+          <span>🎲</span> Generate Test Data
+        </button>
+        
+        <div id="generatedData"></div>
+      </div>
+      
+      <div class="card">
+        <h3>🔑 Boundary Value Analysis</h3>
+        <div class="form-group">
+          <label>Input Type</label>
+          <select id="boundaryType">
+            <option value="numeric">Numeric Range</option>
+            <option value="string">String Length</option>
+            <option value="date">Date Range</option>
+          </select>
+        </div>
+        <button class="btn btn-secondary" id="generateBoundaryBtn">
+          <span>🎯</span> Generate Boundary Values
+        </button>
+        <div id="boundaryValues"></div>
+      </div>
+    </div>
+    
+    <!-- Performance Monitor Tab -->
+    <div id="performance" class="tab-content">
+      <div class="card">
+        <h3>⚡ Performance Monitor</h3>
+        <button class="btn btn-primary" id="analyzePerformanceBtn">
+          <span>📊</span> Analyze Page Performance
+        </button>
+        
+        <div id="performanceResults"></div>
+      </div>
+      
+      <div class="card">
+        <h3>🌐 Network Analysis</h3>
+        <button class="btn btn-secondary" id="analyzeNetworkBtn">
+          <span>📡</span> Analyze Network Requests
+        </button>
+        <div id="networkResults"></div>
+      </div>
+    </div>
+    
+    <!-- Accessibility Checker Tab -->
+    <div id="accessibility" class="tab-content">
+      <div class="card">
+        <h3>♿ Accessibility Checker (WCAG)</h3>
+        <button class="btn btn-primary" id="checkAccessibilityBtn">
+          <span>🔍</span> Run Accessibility Audit
+        </button>
+        
+        <div id="accessibilityResults"></div>
+      </div>
+    </div>
+    
+    <!-- Visual Regression Tab -->
+    <div id="visualRegression" class="tab-content">
+      <div class="card">
+        <h3>👁️ Visual Regression Testing</h3>
+        
+        <button class="btn btn-primary" id="captureBaselineBtn">
+          <span>📸</span> Capture Baseline Screenshot
+        </button>
+        
+        <button class="btn btn-secondary" id="compareScreenshotBtn">
+          <span>🔄</span> Compare with Baseline
+        </button>
+        
+        <div id="visualComparisonResults"></div>
+      </div>
+    </div>
+    
+    <!-- Test Plan Generator Tab -->
+    <div id="testPlan" class="tab-content">
+      <div class="card">
+        <h3>📊 Test Plan & Case Generator</h3>
+        
+        <div class="form-group">
+          <label>Feature/Module Name</label>
+          <input type="text" id="featureName" placeholder="e.g., Login Page">
+        </div>
+        
+        <div class="form-group">
+          <label>Feature Description</label>
+          <textarea id="featureDescription" placeholder="Describe the feature functionality..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Test Coverage Type</label>
+          <select id="coverageType">
+            <option value="comprehensive">Comprehensive (All scenarios)</option>
+            <option value="smoke">Smoke Testing</option>
+            <option value="regression">Regression Testing</option>
+            <option value="security">Security Testing</option>
+            <option value="performance">Performance Testing</option>
+          </select>
+        </div>
+        
+        <button class="btn btn-primary" id="generateTestPlanBtn">
+          <span>✨</span> Generate Test Plan with AI
+        </button>
+        
+        <div id="testPlanOutput"></div>
+      </div>
+    </div>
+    
+    <!-- AI Assistant Tab -->
+    <div id="aiAssistant" class="tab-content">
+      <div class="card">
+        <h3>🤖 AI Testing Assistant</h3>
+        <p style="font-size: 12px; color: #666; margin-bottom: 15px;">
+          Ask me anything about testing! I can help with:
+          <br>• Writing test scripts
+          <br>• Finding bugs
+          <br>• Test strategies
+          <br>• Best practices
+        </p>
+        
+        <div class="ai-chat">
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-message ai">
+              👋 Hi! I'm your AI Testing Assistant. How can I help you with your testing tasks today?
+            </div>
+          </div>
+          
+          <div class="chat-input-container">
+            <textarea class="chat-input" id="aiInput" placeholder="Ask me anything about testing..." rows="2"></textarea>
+            <button class="btn btn-primary" id="sendAiBtn">
+              <span>🚀</span> Send
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3>⚙️ AI Configuration</h3>
+        <div class="form-group">
+          <label>AI Provider</label>
+          <select id="aiProvider">
+            <option value="lmarena">LM Arena (Free - No API Key!) ⭐ RECOMMENDED</option>
+            <option value="ollama">Ollama (Local - Free)</option>
+            <option value="groq">Groq (Cloud - Free API)</option>
+            <option value="huggingface">HuggingFace Inference (Free)</option>
+            <option value="custom">Custom API</option>
+          </select>
+        </div>
+        
+        <div class="info-box" style="background: #e7f3ff; padding: 15px; border-radius: 5px; margin-top: 10px;">
+          <strong>✨ LM Arena Integration:</strong>
+          <p style="margin: 5px 0; font-size: 13px;">
+            LM Arena (lmarena.ai) is 100% FREE and requires NO API KEY!<br>
+            It provides access to multiple state-of-the-art AI models.<br>
+            Simply select "LM Arena" and start using AI features immediately!
+          </p>
+        </div>
+        
+        <div class="form-group" id="apiKeyGroup" style="display: none;">
+          <label>API Key (Optional for free tiers)</label>
+          <input type="password" id="aiApiKey" placeholder="Enter API key if required">
+        </div>
+        
+        <button class="btn btn-secondary" id="saveAiConfigBtn">
+          <span>💾</span> Save Configuration
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="sidebar.js"></script>
+</body>
+</html>

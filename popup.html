@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TestMaster AI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 380px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+    }
+    .header {
+      padding: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .container {
+      padding: 15px;
+    }
+    .section {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .section h3 {
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    }
+    .icon {
+      font-size: 18px;
+    }
+    .status {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .ai-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+    .ai-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .quick-action {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .quick-btn {
+      padding: 8px;
+      font-size: 11px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🤖 TestMaster AI</h1>
+    <p>Complete Automation Testing Assistant</p>
+  </div>
+  
+  <div class="container">
+    <div class="ai-status">
+      <span>AI Assistant: Ready</span>
+      <div class="ai-indicator"></div>
+    </div>
+
+    <!-- Main Testing Panel -->
+    <div class="section">
+      <h3>🎯 Main Testing Panel</h3>
+      <button class="btn btn-primary" id="openSidebar">
+        <span class="icon">🚀</span>
+        <span>Open Full Testing Dashboard</span>
+      </button>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section">
+      <h3>⚡ Quick Actions</h3>
+      <div class="quick-action">
+        <button class="btn quick-btn" id="startRecording">
+          <span>🔴 Record</span>
+        </button>
+        <button class="btn quick-btn" id="inspectElement">
+          <span>🔍 Inspect</span>
+        </button>
+        <button class="btn quick-btn" id="captureScreen">
+          <span>📸 Capture</span>
+        </button>
+        <button class="btn quick-btn" id="generateData">
+          <span>🎲 Test Data</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- All Testing Features -->
+    <div class="section">
+      <h3>📋 All Features</h3>
+      <button class="btn" id="elementLocator">
+        <span class="icon">🎯</span>
+        <span>Element Locator & Selector Generator</span>
+      </button>
+      <button class="btn" id="scriptGenerator">
+        <span class="icon">📝</span>
+        <span>Test Script Generator (All Frameworks)</span>
+      </button>
+      <button class="btn" id="apiTester">
+        <span class="icon">🌐</span>
+        <span>API Testing & Validation</span>
+      </button>
+      <button class="btn" id="bugReporter">
+        <span class="icon">🐛</span>
+        <span>Bug Reporter & Documentation</span>
+      </button>
+      <button class="btn" id="testDataGen">
+        <span class="icon">💾</span>
+        <span>Test Data Generator</span>
+      </button>
+      <button class="btn" id="performanceMonitor">
+        <span class="icon">⚡</span>
+        <span>Performance Monitor</span>
+      </button>
+      <button class="btn" id="accessibilityCheck">
+        <span class="icon">♿</span>
+        <span>Accessibility Checker</span>
+      </button>
+      <button class="btn" id="visualRegression">
+        <span class="icon">👁️</span>
+        <span>Visual Regression Testing</span>
+      </button>
+      <button class="btn" id="testPlanGen">
+        <span class="icon">📊</span>
+        <span>Test Plan & Case Generator</span>
+      </button>
+      <button class="btn" id="aiAssistant">
+        <span class="icon">🤖</span>
+        <span>AI Testing Assistant</span>
+      </button>
+    </div>
+
+    <div class="status" id="status">
+      Ready to assist with testing! 🚀
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
