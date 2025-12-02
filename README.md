@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🤖 TestMaster AI - Complete Testing Assistant
 
 ## The Ultimate AI-Powered Chrome Extension for Software Testing Automation
@@ -472,3 +473,6 @@ TestMaster AI is built by automation testers who understand the daily challenges
 ---
 
 *TestMaster AI - Your Complete Testing Companion*
+=======
+# TestMaster
+>>>>>>> 1a9a8a54fb9226334fb9381a01818ceced2a67e4
